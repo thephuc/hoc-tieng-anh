@@ -4,7 +4,8 @@ import Typography from '@material-ui/core/Typography';
 
 const styles = {
   rootContainter: {
-    color: "red"
+    color: "red",
+    margin: "auto 100px"
   }
 };
 
