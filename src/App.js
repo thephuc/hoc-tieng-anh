@@ -1,16 +1,25 @@
+import React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
 import Login from './components/Login';
-import store from './store';
+import configureStore, { history } from './store';
+import StudentIndex from './components/studentComponents/StudentIndex';
+
+const store = configureStore();
 
 function App() {
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <Switch>
-          <Route component={Login} />
-        </Switch>
-      </BrowserRouter>
+      <ConnectedRouter history={history}>
+        <>
+          <Switch>
+            <Route component={StudentIndex} path="/student" />
+            <Route component={Login} />
+
+          </Switch>
+        </>
+      </ConnectedRouter>
     </Provider>
   );
 }
