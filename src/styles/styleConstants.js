@@ -1,3 +1,3 @@
 export const COLOR_CODES = {
-  ERROR: "red"
+  ERROR: "#f44336"
 }

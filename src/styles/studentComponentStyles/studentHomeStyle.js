@@ -1,16 +1,12 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    marginTop: 20,
+const useStudentHomeStyles = makeStyles((theme) => ({
+  cardMedia: {
+    paddingTop: '56.25%', // 16:9
   },
-  difficultyLevelRadio: {
-    textTransform: 'capitalize',
-  },
-  button: {
-    margin: theme.spacing(1, 1, 0, 0),
-  },
+  link: {
+    textDecoration: "none"
+  }
 }));
 
-export default useStyles;
+export default useStudentHomeStyles;

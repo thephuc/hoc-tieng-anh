@@ -14,6 +14,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useDispatch } from 'react-redux';
 import { login } from '../actions/loginActions';
+import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { ROLES } from '../data/constants';
+import { useFormik } from 'formik';
+import { COLOR_CODES } from '../styles/styleConstants';
+import { isEmpty } from 'lodash';
 
 function Copyright() {
   return (
@@ -36,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
+  errorText: {
+    color: COLOR_CODES.ERROR
+  },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
@@ -47,25 +55,69 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  roleOption: {
+    textTransform: "capitalize"
+  },
+  roleFormControl: {
+    minWidth: 120
+  }
 }));
+
+const validateForm = (values) => {
+  return Object.keys(values).reduce((errorMap, key) => {
+    const _value = values[key];
+    switch (key) {
+      case "email": {
+        if (!_value) {
+          errorMap[key] = "Email is required.";
+        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(_value)) {
+          errorMap[key] = "Invalid email address."
+        }
+        break;
+      }
+      case "password": {
+        if (!_value) {
+          errorMap[key] = "Password is required.";
+        }
+        break;
+      }
+      case "role": {
+        if (!_value) {
+          errorMap[key] = "Please select a role.";
+        }
+        break;
+      }
+    }
+    return errorMap;
+  }, {});
+}
 
 export default function SignIn() {
   const classes = useStyles();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const dispatch = useDispatch();
 
-  const handleLoginClicked = (e) => {
-    e.preventDefault();
-    if (email && password) {
-      try {
-        dispatch(login({ email, password }));
-      } catch (err) {
-        console.log('failed to log in: ', err);
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+      role: ""
+    },
+    initialTouched: {
+      email: false,
+      password: false,
+      role: false
+    },
+    onSubmit: values => {
+      const { email, password, role } = values;
+      if (email && password && role) {
+        dispatch(login({ email, password, role }));
       }
-    }
-  };
+    },
+    validate: (values) => validateForm(values)
+  })
 
+  const { values: { email, password, role } = {}, handleChange, touched, errors, handleSubmit, handleBlur } = formik; 
+  const _isSubmitDisabled = !isEmpty(errors) || Object.values(touched).some((isFieldTouched) => !isFieldTouched);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -76,7 +128,31 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Log in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit}>
+          <FormControl required variant="outlined" className={classes.roleFormControl}>
+            <InputLabel id="roleSelectLabel">Role</InputLabel>
+            <Select
+              autoFocus
+              labelId="roleSelectLabel"
+              id="role"
+              name="role"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={role}
+              error={touched.role && Boolean(errors.role)}
+              label="Role"
+            >
+              {
+                Object.values(ROLES).map((roleOption) => (
+                  <MenuItem className={classes.roleOption} value={roleOption} key={roleOption}>{roleOption}</MenuItem>
+                ))
+              }
+            </Select>
+            {
+              touched.role && Boolean(errors.role) &&
+              <FormHelperText className={classes.errorText}>{errors.role}</FormHelperText>
+            }
+          </FormControl>
           <TextField
             variant="outlined"
             margin="normal"
@@ -86,8 +162,11 @@ export default function SignIn() {
             label="Email Address"
             name="email"
             autoComplete="email"
-            autoFocus
-            onChange={({ target: { value } }) => setEmail(value)}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={email}
+            error={touched.email && Boolean(errors.email)}
+            helperText={touched.email && errors.email}
           />
           <TextField
             variant="outlined"
@@ -99,7 +178,11 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
-            onChange={({ target: { value } }) => setPassword(value)}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={password}
+            error={touched.password && Boolean(errors.password)}
+            helperText={touched.password && errors.password}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -110,8 +193,8 @@ export default function SignIn() {
             fullWidth
             variant="contained"
             color="primary"
+            disabled={_isSubmitDisabled}
             className={classes.submit}
-            onClick={handleLoginClicked}
           >
             Sign In
           </Button>

@@ -9,3 +9,27 @@ export const QUESTION_TYPES = {
   FILL_IN_GAPS: 'fill_in_gaps',
   TRANSLATE: 'translate',
 };
+
+export const ROLES = {
+  STUDENT: "student",
+  TEACHER: "teacher"
+}
+
+export const STUDENT_LINKS = {
+  HOME: {
+    label: "Home",
+    path: "home"
+  },
+  EXERCISE: {
+    label: "Exercise",
+    path: "exercise"
+  },
+  RESULTS: {
+    label: "Results",
+    path: "results"
+  },
+  LOG_OUT: {
+    label: "Log out",
+    path: ""
+  },
+}

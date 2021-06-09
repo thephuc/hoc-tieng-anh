@@ -2,7 +2,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,26 +13,39 @@ import Container from '@material-ui/core/Container';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Divider from '@material-ui/core/Divider';
 import {
-  Link, Route, Switch, useRouteMatch,
+  Route, useHistory,
 } from 'react-router-dom';
 import StudentHome from './StudentHome';
 import useStudentIndexStyles from '../../styles/studentComponentStyles/studentIndexStyle';
 import ElevationScroll from '../shared/ElevationScroll';
 import Exercise from './sExerciseComponents/Exercise';
+import ExerciseHome from './sExerciseComponents/ExerciseHome';
+import { STUDENT_LINKS } from '../../data/constants';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../actions/loginActions';
 
 export default function StudentIndex(props) {
   const classes = useStudentIndexStyles();
   const { match: { url, path } = {} } = props;
-
+  const history = useHistory();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const toggleDrawer = (isOpen) => (event) => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
-
     setIsDrawerOpen(isOpen);
   };
+
+  const handleMenuItemClicked = (linkData) => {
+    const { label, path } = linkData;
+    if (label === "Log out") {
+      dispatch(logout());
+      return;
+    }
+    history.push(`${url}/${path}`);
+  }
 
   const drawerItemList = () => (
     <div
@@ -48,9 +61,9 @@ export default function StudentIndex(props) {
       </div>
       <Divider />
       <List>
-        {['Home', 'Exercises', 'Results', 'Log out'].map((text) => (
-          <ListItem button key={text}>
-            <Link to={`${url}/home`}>{text}</Link>
+        {Object.values(STUDENT_LINKS).map((value) => (
+          <ListItem button key={value.label} onClick={() => handleMenuItemClicked(value)}>
+            <ListItemText primary={value.label} />
           </ListItem>
         ))}
       </List>
@@ -80,6 +93,7 @@ export default function StudentIndex(props) {
       <Toolbar />
       <Container className={classes.contentContainer}>
         <Route exact path={`${path}/home`} component={StudentHome} />
+        <Route exact path={`${path}/exercise`} component={ExerciseHome} />
         <Route exact path={`${path}/difficulty/:difficultyLevel/exercise/:exerciseId`} component={Exercise} />
       </Container>
       <SwipeableDrawer

@@ -9,6 +9,12 @@ export const login = ({ email, password }) => (dispatch) => {
       userEmail: email,
     },
   }));
+  localStorage.setItem("userEmail", email);
   dispatch(push('/student'));
   // }
 };
+
+export const logout = () => (dispatch) => {
+  localStorage.clear();
+  dispatch(push('/login'))
+}

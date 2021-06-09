@@ -17,7 +17,6 @@ export const exerciseSlice = createSlice({
       state.currentExercise = action.payload;
     },
     setExerciseMapData: (state, action) => {
-      console.log(action);
       state.exerciseMap = action.payload;
     },
   },

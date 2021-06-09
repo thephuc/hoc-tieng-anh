@@ -1,81 +1,47 @@
-import { useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import Button from '@material-ui/core/Button';
-import { useDispatch, useSelector } from 'react-redux';
-import useStyles from '../../styles/studentComponentStyles/studentHomeStyle';
-import { setCurrentExercise, getExerciseMapData } from '../../actions/exerciseActions';
+import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@material-ui/core';
+import useStudentHomeStyles from '../../styles/studentComponentStyles/studentHomeStyle';
+import { Link } from 'react-router-dom';
 
-export default function StudentHome() {
-  const classes = useStyles();
-  const dispatch = useDispatch();
-  const [difficultyLevel, setDifficultyLevel] = useState('');
-  const [selectedExerciseId, setSelectedExerciseId] = useState('');
-  const exerciseMap = useSelector((state) => (state.exercise && state.exercise.exerciseMap) || {});
-
-  const handleDifficultyLevelSelected = ({ target: { value } }) => {
-    setDifficultyLevel(value);
-  };
-
-  const handleExerciseSelected = ({ target: { value } }) => {
-    setSelectedExerciseId(value);
-  };
-
-  const handleStartButtonClicked = () => {
-    dispatch(setCurrentExercise(difficultyLevel, selectedExerciseId));
-  };
-
-  useEffect(() => {
-    dispatch(getExerciseMapData());
-  }, []);
+export default function StudentHome() {  
+  const classes = useStudentHomeStyles();
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <FormControl component="fieldset">
-          <FormLabel component="legend">Please select a difficulty level</FormLabel>
-          <RadioGroup className={classes.difficultyLevelRadio} aria-label="level" name="levelRadio" value={difficultyLevel} onChange={handleDifficultyLevelSelected}>
-            {
-              Object.keys(exerciseMap).map((key) => (
-                <FormControlLabel key={key} value={key} control={<Radio color="primary" />} label={key} />
-              ))
-            }
-          </RadioGroup>
-        </FormControl>
+      <Grid item xs={6}>
+        <Link to='/student/exercise' className={classes.link} >
+          <Card>
+            <CardActionArea>
+              <CardMedia 
+                className={classes.cardMedia}
+                image="/images/exercise-img.jpg"
+                title="Do an exercise"
+              />
+              <CardContent>
+                <Typography align="center" variant="h5" gutterBottom>Do an exercise</Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Link>
       </Grid>
 
-      {
-        difficultyLevel && exerciseMap[difficultyLevel]
-        && (
-        <Grid item xs={12}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Please select an exercise</FormLabel>
-            <RadioGroup className={classes.difficultyLevelRadio} aria-label="exercise" name="exerciseRadio" value={selectedExerciseId} onChange={handleExerciseSelected}>
-              {
-                exerciseMap[difficultyLevel].map((exercise) => (
-                  <FormControlLabel key={exercise.id} value={exercise.id} control={<Radio color="primary" />} label={exercise.name} />
-                ))
-              }
-            </RadioGroup>
-          </FormControl>
-        </Grid>
-        )
-      }
-      <Grid item xs={12}>
-        <Button
-          variant="outlined"
-          disabled={!selectedExerciseId}
-          color="primary"
-          className={classes.button}
-          onClick={handleStartButtonClicked}
-        >
-          Start exercise
-        </Button>
+      <Grid item xs={6}>
+        <Link to='/student/review' className={classes.link} >
+          <Card>
+            <CardActionArea>
+              <CardMedia 
+                className={classes.cardMedia}
+                image="/images/review-img.jpg"
+                title="Review past results"
+              />
+              <CardContent>
+                <Typography align="center" variant="h5" gutterBottom>Review past results</Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Link>
       </Grid>
+      
     </Grid>
   );
 }
