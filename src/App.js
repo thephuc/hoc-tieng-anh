@@ -16,6 +16,7 @@ function App() {
           <Switch>
             <Route component={StudentIndex} path="/student" />
             <Route component={Login} path="/login" />
+            <Route component={StudentIndex} exact path="/"/>
           </Switch>
         </>
       </ConnectedRouter>

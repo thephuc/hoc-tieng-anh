@@ -95,6 +95,7 @@ export default function StudentIndex(props) {
         <Route exact path={`${path}/home`} component={StudentHome} />
         <Route exact path={`${path}/exercise`} component={ExerciseHome} />
         <Route exact path={`${path}/difficulty/:difficultyLevel/exercise/:exerciseId`} component={Exercise} />
+        <Route exact path={`/`} component={StudentHome} />
       </Container>
       <SwipeableDrawer
         anchor="left"
