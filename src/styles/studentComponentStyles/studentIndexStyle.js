@@ -17,7 +17,7 @@ const useStudentIndexStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   toolbar: {
-    height: TOOLBAR_HEIGHT,
+    minHeight: TOOLBAR_HEIGHT,
     alignItems: 'flex-start',
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
