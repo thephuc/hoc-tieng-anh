@@ -10,6 +10,8 @@ const useQuestionStyles = makeStyles(() => ({
   },
   cardHeader: {
     paddingBottom: 8,
+    display: "flex", 
+    alignItems: "center"
   },
   cardContent: {
     paddingTop: 0,

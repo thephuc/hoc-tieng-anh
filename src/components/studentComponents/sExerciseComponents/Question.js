@@ -8,13 +8,16 @@ import MCQ from './questionTypes/MCQ';
 import FillGap from './questionTypes/FillGap';
 import useQuestionStyles from '../../../styles/studentComponentStyles/sExerciseStyles/questionStyle';
 import Translate from './questionTypes/Translate';
+import { EXERCISE_COMPONENT_STATE } from '../../../actions/exerciseActions';
+import { Check, Close } from '@material-ui/icons';
+import { COLOR_CODES } from '../../../styles/styleConstants';
 
 export default function Question(props) {
   const classes = useQuestionStyles();
   const {
     questionData: {
-      instruction, text, answerOptions, id, point, type
-    }, onAnswerSet, studentAnswer, idx, error, isTouched
+      instruction, text, answerOptions, id, point, type, answer
+    }, onAnswerSet, studentAnswer, idx, error, isTouched, mode
   } = props;
 
   if (!instruction) {
@@ -32,13 +35,13 @@ export default function Question(props) {
   const renderQuestionByType = () => {
     switch(type) {
       case QUESTION_TYPES.MCQ: {
-        return <MCQ questionData={{answerOptions, text}} onAnswerSelected={handleAnswerSet} studentAnswer={studentAnswer}/>
+        return <MCQ mode={mode} questionData={{answerOptions, text, answer}} onAnswerSelected={handleAnswerSet} studentAnswer={studentAnswer}/>
       }
       case QUESTION_TYPES.FILL_IN_GAPS: {
-        return <FillGap questionData={{text}} onInputChanged={handleAnswerSet} studentAnswer={studentAnswer} />
+        return <FillGap mode={mode} questionData={{text, answer}} onInputChanged={handleAnswerSet} studentAnswer={studentAnswer} />
       }
       case QUESTION_TYPES.TRANSLATE: {
-        return <Translate questionData={{text}} onInputChanged={handleAnswerSet} studentAnswer={studentAnswer} />
+        return <Translate mode={mode} questionData={{text, answer}} onInputChanged={handleAnswerSet} studentAnswer={studentAnswer} />
       }
       default: {
         return <></>
@@ -46,10 +49,25 @@ export default function Question(props) {
     }
   }
 
+  const renderCardHeader = () => {
+    if (mode == EXERCISE_COMPONENT_STATE.SUBMITTED) {
+      const _color = studentAnswer === answer ? COLOR_CODES.CORRECT : COLOR_CODES.ERROR;
+      const _title = <span>Question {idx + 1} <span style={{color: _color}}>({point} {point > 1 ? 'points' : 'point'})</span></span>;
+      return (
+        <div className={classes.cardHeader}>
+        <CardHeader title={_title} />
+        {studentAnswer === answer ? <Check style={{color: _color}}/> : <Close style={{color: _color}}/>}
+        </div>
+      )
+    } else {
+      return <CardHeader className={classes.cardHeader} title={`Question ${idx + 1} (${point} ${point > 1 ? 'points' : 'point'})`} />;
+    }
+  }
+
   return (
     <Grid item xs={12}>
       <Card className={classes.card}>
-        <CardHeader className={classes.cardHeader} title={`Question ${idx + 1} (${point} ${point > 1 ? 'points' : 'point'})`} />
+        {renderCardHeader()}
         <CardContent className={classes.cardContent}>
         {
           isTouched && error && <Typography variant="subtitle1" className={classes.error}>{error}</Typography>
@@ -71,22 +89,26 @@ Question.propTypes = {
     answerOptions: PropTypes.array,
     id: PropTypes.string,
     point: PropTypes.number,
-    type: PropTypes.string
+    type: PropTypes.string,
+    answer: PropTypes.string
   }),
   studentAnswer: PropTypes.string,
   onAnswerSet: PropTypes.func,
   idx: PropTypes.number,
   error: PropTypes.string,
-  isTouched: PropTypes.bool
+  isTouched: PropTypes.bool,
+  mode: PropTypes.string
 };
 
 Question.defaultProps = {
   questionData: {
-    instruction: "", text: "", answerOptions: [], id: null, point: null, type: null
+    instruction: "", text: "", answerOptions: [], id: null, point: null, type: null,
+    answer: ""
   },
   studentAnswer: "",
   onAnswerSet: () => {},
   idx: null,
   error: null,
-  isTouched: false
+  isTouched: false,
+  mode: EXERCISE_COMPONENT_STATE.UNSUBMITTED
 }

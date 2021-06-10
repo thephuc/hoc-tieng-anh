@@ -86,7 +86,11 @@ export default function Exercise() {
     const _studentAnswer = values[id] || "";
     const _error = errors[id] || null;
     const _isTouched = touched[id] || false;
-    return <Question key={id} questionData={question} error={_error} isTouched={_isTouched} idx={idx} studentAnswer={_studentAnswer} onAnswerSet={handleSetStudentAnswer} />;    
+    return <Question 
+    mode={componentState}
+    key={id} 
+    questionData={question} 
+    error={_error} isTouched={_isTouched} idx={idx} studentAnswer={_studentAnswer} onAnswerSet={handleSetStudentAnswer} />;    
   });
 
   const highlightUnfinishedQuestions = () => {
