@@ -15,17 +15,17 @@ import Divider from '@material-ui/core/Divider';
 import {
   Route, useHistory,
 } from 'react-router-dom';
-import StudentHome from './StudentHome';
-import useStudentIndexStyles from '../../styles/studentComponentStyles/studentIndexStyle';
+import TeacherHome from './TeacherHome';
 import ElevationScroll from '../shared/ElevationScroll';
-import Exercise from './sExerciseComponents/Exercise';
-import ExerciseHome from './sExerciseComponents/ExerciseHome';
-import { STUDENT_LINKS } from '../../data/constants';
+//import Exercise from './sExerciseComponents/Exercise';
+//import ExerciseHome from './sExerciseComponents/ExerciseHome';
+import { TEACHER_LINKS } from '../../data/constants';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../actions/loginActions';
+import useTeacherIndexStyles from '../../styles/teacherComponentStyles/teacherIndexStyle';
 
-export default function StudentIndex(props) {
-  const classes = useStudentIndexStyles();
+export default function TeacherIndex(props) {
+  const classes = useTeacherIndexStyles()
   const { match: { url, path } = {} } = props;
   const history = useHistory();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -61,7 +61,7 @@ export default function StudentIndex(props) {
       </div>
       <Divider />
       <List>
-        {Object.values(STUDENT_LINKS).map((value) => (
+        {Object.values(TEACHER_LINKS).map((value) => (
           <ListItem button key={value.label} onClick={() => handleMenuItemClicked(value)}>
             <ListItemText primary={value.label} />
           </ListItem>
@@ -92,10 +92,10 @@ export default function StudentIndex(props) {
       {/* put a Toolbar here to make sure the Container is below ElevationScroll */}
       <Toolbar />
       <Container className={classes.contentContainer}>
-        <Route exact path={`${path}/home`} component={StudentHome} />
-        <Route exact path={`${path}/exercise`} component={ExerciseHome} />
-        <Route exact path={`${path}/difficulty/:difficultyLevel/exercise/:exerciseId`} component={Exercise} />
-        <Route exact path={`${path}/`} component={StudentHome} />
+        <Route exact path={`${path}/home`} component={TeacherHome} />
+        {/*<Route exact path={`${path}/exercise`} component={ExerciseHome} />
+        <Route exact path={`${path}/difficulty/:difficultyLevel/exercise/:exerciseId`} component={Exercise} />*/}
+        <Route exact path={`${path}/`} component={TeacherHome} />
       </Container>
       <SwipeableDrawer
         anchor="left"

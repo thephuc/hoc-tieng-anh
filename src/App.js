@@ -5,6 +5,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import Login from './components/Login';
 import configureStore, { history } from './store';
 import StudentIndex from './components/studentComponents/StudentIndex';
+import TeacherIndex from './components/teacherComponents/TeacherIndex';
 
 const store = configureStore();
 
@@ -15,6 +16,7 @@ function App() {
         <>
           <Switch>
             <Route component={StudentIndex} path="/student" />
+            <Route component={TeacherIndex} path="/teacher" />
             <Route component={Login} path="/login" />
             <Route component={StudentIndex} exact path="/"/>
           </Switch>

@@ -33,3 +33,22 @@ export const STUDENT_LINKS = {
     path: ""
   },
 }
+
+export const TEACHER_LINKS = {
+  HOME: {
+    label: "Home",
+    path: "home"
+  },
+  EXERCISE: {
+    label: "Exercise",
+    path: "exercise"
+  },
+  STUDENTS: {
+    label: "Students",
+    path: "students"
+  },
+  LOG_OUT: {
+    label: "Log out",
+    path: ""
+  },
+}
