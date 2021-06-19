@@ -115,8 +115,9 @@ export default function Exercise() {
           <Grid item xs={12} className={classes.actionSection}>
             {
               _isSubmitDisabled && 
-              <Typography variant="h6" gutterBottom={true}>You have attempted <b>{_attemptedCount}/{_questionCount}</b> question(s). 
-              Click <a className={classes.highlightUnfinished} onClick={highlightUnfinishedQuestions}>here</a> to highlight unfinished question(s)
+              <Typography variant="h6" gutterBottom={true}>
+                You have attempted <b>{_attemptedCount}/{_questionCount}</b> question(s). 
+                Click <a className={classes.highlightUnfinished} onClick={highlightUnfinishedQuestions}>here</a> to highlight unfinished question(s)
             </Typography>
             }
             <Button

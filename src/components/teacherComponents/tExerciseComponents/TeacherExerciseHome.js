@@ -7,11 +7,11 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Button from '@material-ui/core/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentExercise, getExerciseMapData } from '../../../actions/exerciseActions';
+import { setCurrentExercise, getExerciseMapData, createNewExercise } from '../../../actions/exerciseActions';
 import useExerciseStyles from '../../../styles/studentComponentStyles/sExerciseStyles/exerciseStyle';
 import { ROLES } from '../../../data/constants';
 
-export default function ExerciseHome() {
+export default function TeacherExerciseHome() {
   const classes = useExerciseStyles();
   const dispatch = useDispatch();
   const [difficultyLevel, setDifficultyLevel] = useState('');
@@ -26,13 +26,17 @@ export default function ExerciseHome() {
     setSelectedExerciseId(value);
   };
 
-  const handleStartButtonClicked = () => {
-    dispatch(setCurrentExercise({difficultyLevel, exerciseId: selectedExerciseId, userRole: ROLES.STUDENT, redirect: true}));
+  const handleEditExerciseClicked = () => {
+    dispatch(setCurrentExercise({difficultyLevel, exerciseId: selectedExerciseId, userRole: ROLES.TEACHER, redirect: true}));
   };
 
   useEffect(() => {
     dispatch(getExerciseMapData());
   }, []);
+
+  const handleCreateNewButtonClicked = () => {
+    dispatch(createNewExercise(difficultyLevel));
+  }
 
   return (
     <Grid container spacing={3}>
@@ -69,12 +73,23 @@ export default function ExerciseHome() {
       <Grid item xs={12}>
         <Button
           variant="contained"
+          color="primary"
+          className={classes.button}
+          onClick={handleCreateNewButtonClicked}
+          disabled={!difficultyLevel || !exerciseMap[difficultyLevel]}
+        >
+          Create new exercise
+        </Button>
+      </Grid>
+      <Grid item xs={12}>
+        <Button
+          variant="contained"
           disabled={!selectedExerciseId}
           color="primary"
           className={classes.button}
-          onClick={handleStartButtonClicked}
+          onClick={handleEditExerciseClicked}
         >
-          Start exercise
+          View/Edit exercise
         </Button>
       </Grid>
     </Grid>

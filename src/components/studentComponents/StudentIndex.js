@@ -13,7 +13,8 @@ import Container from '@material-ui/core/Container';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Divider from '@material-ui/core/Divider';
 import {
-  Route, useHistory,
+  Redirect,
+  Route, Switch, useHistory,
 } from 'react-router-dom';
 import StudentHome from './StudentHome';
 import useStudentIndexStyles from '../../styles/studentComponentStyles/studentIndexStyle';
@@ -23,10 +24,11 @@ import ExerciseHome from './sExerciseComponents/ExerciseHome';
 import { STUDENT_LINKS } from '../../data/constants';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../actions/loginActions';
+import PrivateRoute from '../shared/PrivateRoute';
 
 export default function StudentIndex(props) {
   const classes = useStudentIndexStyles();
-  const { match: { url, path } = {} } = props;
+  const { computedMatch: { url, path } = {} } = props;
   const history = useHistory();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const dispatch = useDispatch();
@@ -92,10 +94,12 @@ export default function StudentIndex(props) {
       {/* put a Toolbar here to make sure the Container is below ElevationScroll */}
       <Toolbar />
       <Container className={classes.contentContainer}>
-        <Route exact path={`${path}/home`} component={StudentHome} />
-        <Route exact path={`${path}/exercise`} component={ExerciseHome} />
-        <Route exact path={`${path}/difficulty/:difficultyLevel/exercise/:exerciseId`} component={Exercise} />
-        <Route exact path={`${path}/`} component={StudentHome} />
+        <Switch>
+          <PrivateRoute exact path={`${path}/home`} component={StudentHome} />
+          <PrivateRoute exact path={`${path}/exercise`} component={ExerciseHome} />
+          <PrivateRoute exact path={`${path}/difficulty/:difficultyLevel/exercise/:exerciseId`} component={Exercise} />
+          <Route path={[`${path}`, `${path}/`]} ><Redirect to={`${path}/home`}/></Route>
+        </Switch>
       </Container>
       <SwipeableDrawer
         anchor="left"

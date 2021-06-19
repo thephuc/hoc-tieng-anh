@@ -52,3 +52,8 @@ export const TEACHER_LINKS = {
     path: ""
   },
 }
+
+export const KEYS = {
+  USER_INFO: "userInfo",
+  NAME: "name"
+}

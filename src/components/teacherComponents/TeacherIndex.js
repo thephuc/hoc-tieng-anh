@@ -13,7 +13,7 @@ import Container from '@material-ui/core/Container';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Divider from '@material-ui/core/Divider';
 import {
-  Route, useHistory,
+  Route, useHistory, Redirect, Switch
 } from 'react-router-dom';
 import TeacherHome from './TeacherHome';
 import ElevationScroll from '../shared/ElevationScroll';
@@ -23,10 +23,13 @@ import { TEACHER_LINKS } from '../../data/constants';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../actions/loginActions';
 import useTeacherIndexStyles from '../../styles/teacherComponentStyles/teacherIndexStyle';
+import TeacherExerciseHome from './tExerciseComponents/TeacherExerciseHome';
+import TeacherExercise from './tExerciseComponents/TeacherExercise';
+import PrivateRoute from '../shared/PrivateRoute';
 
 export default function TeacherIndex(props) {
   const classes = useTeacherIndexStyles()
-  const { match: { url, path } = {} } = props;
+  const { computedMatch: { url, path } = {} } = props;
   const history = useHistory();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const dispatch = useDispatch();
@@ -92,10 +95,13 @@ export default function TeacherIndex(props) {
       {/* put a Toolbar here to make sure the Container is below ElevationScroll */}
       <Toolbar />
       <Container className={classes.contentContainer}>
-        <Route exact path={`${path}/home`} component={TeacherHome} />
-        {/*<Route exact path={`${path}/exercise`} component={ExerciseHome} />
-        <Route exact path={`${path}/difficulty/:difficultyLevel/exercise/:exerciseId`} component={Exercise} />*/}
-        <Route exact path={`${path}/`} component={TeacherHome} />
+        <Switch>
+          <PrivateRoute exact path={`${path}/home`} component={TeacherHome} />
+          <PrivateRoute exact path={`${path}/exercise`} component={TeacherExerciseHome} />
+          <PrivateRoute exact path={`${path}/difficulty/:difficultyLevel/exercise/new`} component={TeacherExercise} />
+          <PrivateRoute exact path={`${path}/difficulty/:difficultyLevel/exercise/:exerciseId`} component={TeacherExercise} />
+          <Route exact path={[`${path}`, `${path}/`]} ><Redirect to={`${path}/home`}/></Route>
+        </Switch>
       </Container>
       <SwipeableDrawer
         anchor="left"

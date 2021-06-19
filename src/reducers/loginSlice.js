@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { getUserInfoFromLocalStorage } from '../utils/localStorage';
 
 export const loginSlice = createSlice({
   name: 'login',
   initialState: {
     userInfo: {
-      userName: '',
-      userEmail: '',
+      userName: getUserInfoFromLocalStorage().userName,
+      userEmail: getUserInfoFromLocalStorage().userEmail,
+      userRole: getUserInfoFromLocalStorage().userRole
     },
   },
   reducers: {

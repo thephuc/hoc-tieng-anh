@@ -19,6 +19,9 @@ const useExerciseStyles = makeStyles((theme) => ({
     color: "#1B64F2",
     textDecoration: "underline"
   },
+  exerciseInput: {
+    margin: "0 16px",
+  }
 }));
 
 export default useExerciseStyles;
